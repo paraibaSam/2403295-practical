@@ -82,6 +82,8 @@ jobs:
       - name: Show Flask startup logs
         working-directory: web
         run: cat flask.log
+      - name: Test connectivity to web
+        run: curl -vk https://localhost:443/ || echo "FAILED to reach localhost:443"
       - name: Wait for Selenium
         run: |
           for i in {1..10}; do

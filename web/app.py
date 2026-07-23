@@ -2,9 +2,9 @@ from flask import Flask, render_template, request, Response
 import psycopg2
 import re
 import os
+import time
 from datetime import datetime
 from functools import wraps
-import time
 
 app = Flask(__name__)
 
@@ -15,10 +15,8 @@ DB_PASSWORD = os.environ.get("DB_PASSWORD", "postgres")
 ADMIN_USER = os.environ.get("ADMIN_USER", "admin")
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "password")
 
-ATTACK_PATTERN = re.compile(
-    r"(--|;|'|\"|<script|</script|onerror=|javascript:|union\s+select|drop\s+table|or\s+1=1)",
-    re.IGNORECASE,
-)
+# OWASP C3 LF#5: allow-list rather than deny-list
+ALLOWED_PATTERN = re.compile(r'^[a-zA-Z0-9 ]*$')
 
 def check_auth(username, password):
     return username == ADMIN_USER and password == ADMIN_PASSWORD
@@ -38,8 +36,8 @@ def requires_auth(f):
     return decorated
 
 def is_attack(search_term):
-    """Backend validation - OWASP C3: validate all inputs."""
-    return bool(ATTACK_PATTERN.search(search_term))
+    """Backend validation - OWASP C3: allow-list of characters."""
+    return not bool(ALLOWED_PATTERN.match(search_term))
 
 def get_connection():
     retries = 10

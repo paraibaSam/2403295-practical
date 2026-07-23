@@ -11,9 +11,9 @@
     </form>
     <script>
         function validateInput() {
-            const pattern = /(--|;|'|"|<script|<\/script|onerror=|javascript:|union\s+select|drop\s+table|or\s+1=1)/i;
+            const allowed = /^[a-zA-Z0-9 ]*$/;
             const field = document.getElementById("search_term");
-            if (pattern.test(field.value)) {
+            if (!allowed.test(field.value)) {
                 field.value = "";
                 alert("Invalid input detected.");
                 return false;

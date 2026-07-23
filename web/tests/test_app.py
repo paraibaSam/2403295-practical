@@ -25,7 +25,7 @@ class RouteIntegrationTests(unittest.TestCase):
     def setUp(self):
         app.config["TESTING"] = True
         self.client = app.test_client()
-        self.auth = {"Authorization": "Basic YWRtaW46MjQwMzI5NUBzaXQuc2luZ2Fwb3JldGVjaC5lZHUuc2c="}
+        self.auth = {"Authorization": "Basic YWRtaW46MjQwMzI5NUBTSVQuc2luZ2Fwb3JldGVjaC5lZHUuc2c="}
 
     def test_home_requires_auth(self):
         response = self.client.get("/")

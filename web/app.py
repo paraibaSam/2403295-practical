@@ -16,7 +16,9 @@ DB_NAME = os.environ.get("DB_NAME", "searchdb")
 DB_USER = os.environ.get("DB_USER", "postgres")
 DB_PASSWORD = os.environ.get("DB_PASSWORD", "postgres")
 ADMIN_USER = os.environ.get("ADMIN_USER", "admin")
-ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "password")
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD")
+if not ADMIN_PASSWORD:
+    raise RuntimeError("ADMIN_PASSWORD environment variable must be set")
 
 # OWASP C3 LF#5: allow-list rather than deny-list
 ALLOWED_PATTERN = re.compile(r'^[a-zA-Z0-9 ]*$')

@@ -8,6 +8,9 @@ from functools import wraps
 
 app = Flask(__name__)
 
+MIN_LENGTH = 1
+MAX_LENGTH = 100
+
 DB_HOST = os.environ.get("DB_HOST", "db")
 DB_NAME = os.environ.get("DB_NAME", "searchdb")
 DB_USER = os.environ.get("DB_USER", "postgres")
@@ -37,6 +40,8 @@ def requires_auth(f):
 
 def is_attack(search_term):
     """Backend validation - OWASP C3: allow-list of characters."""
+    if len(search_term) < MIN_LENGTH or len(search_term) > MAX_LENGTH:
+        return True
     return not bool(ALLOWED_PATTERN.match(search_term))
 
 def get_connection():
@@ -73,9 +78,9 @@ def log_search(term):
 def home():
     if request.method == "POST":
         term = request.form.get("search_term", "")
+        log_search(term)
         if is_attack(term):
             return render_template("index.html", error="Invalid input detected.")
-        log_search(term)
         return render_template("result.html", term=term)
     return render_template("index.html", error=None)
 

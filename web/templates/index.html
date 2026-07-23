@@ -6,14 +6,15 @@
     {% if error %}<p style="color:red;">{{ error }}</p>{% endif %}
     <form method="POST" onsubmit="return validateInput()">
         <label for="search_term">Search term</label>
-        <input type="text" id="search_term" name="search_term" required>
+        <input type="text" id="search_term" name="search_term" minlength="1" maxlength="100" required>
         <button type="submit">Submit</button>
     </form>
     <script>
         function validateInput() {
             const allowed = /^[a-zA-Z0-9 ]*$/;
             const field = document.getElementById("search_term");
-            if (!allowed.test(field.value)) {
+            const value = field.value;
+            if (value.length < 1 || value.length > 100 || !allowed.test(value)) {
                 field.value = "";
                 alert("Invalid input detected.");
                 return false;

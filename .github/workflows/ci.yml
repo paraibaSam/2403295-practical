@@ -71,3 +71,27 @@ jobs:
       - name: Run Selenium tests
         working-directory: web
         run: python tests/selenium_test.py github
+
+  eslint-security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install ESLint and security plugin
+        run: |
+          npm install eslint@^9 --save-dev
+          npm install eslint-plugin-security --save-dev
+          npm install @microsoft/eslint-formatter-sarif --save-dev
+      - name: Run ESLint
+        run: |
+          mkdir -p reports
+          npx eslint . --format=@microsoft/eslint-formatter-sarif --output-file=reports/eslint-results.sarif
+        continue-on-error: true
+      - name: Upload SARIF report
+        uses: actions/upload-artifact@v4
+        with:
+          name: eslint-sarif-report
+          path: reports/eslint-results.sarif

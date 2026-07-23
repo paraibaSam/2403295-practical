@@ -9,18 +9,6 @@
         <input type="text" id="search_term" name="search_term" minlength="1" maxlength="100" required>
         <button type="submit">Submit</button>
     </form>
-    <script>
-        function validateInput() {
-            const allowed = /^[a-zA-Z0-9 ]*$/;
-            const field = document.getElementById("search_term");
-            const value = field.value;
-            if (value.length < 1 || value.length > 100 || !allowed.test(value)) {
-                field.value = "";
-                alert("Invalid input detected.");
-                return false;
-            }
-            return true;
-        }
-    </script>
+    <script src="{{ url_for('static', filename='validate.js') }}"></script>
 </body>
 </html>

@@ -9,6 +9,10 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      ADMIN_USER: admin
+      ADMIN_PASSWORD: "2403295@SIT.singaporetech.edu.sg"
+      DB_PASSWORD: postgres
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python
@@ -41,6 +45,11 @@ jobs:
 
   selenium-test:
     runs-on: ubuntu-latest
+    env:
+      ADMIN_USER: admin
+      ADMIN_PASSWORD: "2403295@SIT.singaporetech.edu.sg"
+      DB_HOST: db
+      DB_PASSWORD: postgres
     container:
       image: python:3.12
       options: --network-alias=web
@@ -49,6 +58,12 @@ jobs:
         image: selenium/standalone-chrome
         ports:
           - 4444:4444
+      db:
+        image: postgres:16
+        env:
+          POSTGRES_DB: searchdb
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
     steps:
       - uses: actions/checkout@v4
       - name: Install dependencies

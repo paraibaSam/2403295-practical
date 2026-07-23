@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>Search</title></head>
+<body>
+    <h1>Search</h1>
+    {% if error %}<p style="color:red;">{{ error }}</p>{% endif %}
+    <form method="POST" onsubmit="return validateInput()">
+        <label for="search_term">Search term</label>
+        <input type="text" id="search_term" name="search_term" required>
+        <button type="submit">Submit</button>
+    </form>
+    <script>
+        function validateInput() {
+            const pattern = /(--|;|'|"|<script|<\/script|onerror=|javascript:|union\s+select|drop\s+table|or\s+1=1)/i;
+            const field = document.getElementById("search_term");
+            if (pattern.test(field.value)) {
+                field.value = "";
+                alert("Invalid input detected.");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>

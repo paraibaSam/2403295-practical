@@ -1,0 +1,43 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "443:443"
+    volumes:
+      - ./web:/app
+      - ./certs:/app/certs
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_NAME=searchdb
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - ADMIN_USER=admin
+      - ADMIN_PASSWORD=2403295@sit.singaporetech.edu.sg
+    networks:
+      - appnet
+
+  db:
+    image: postgres:16
+    environment:
+      - POSTGRES_DB=searchdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - appnet
+      
+  git:
+    image: alpine/git
+    container_name: git-server
+    entrypoint: ["tail", "-f", "/dev/null"]
+    volumes:
+      - ./:/repo
+    working_dir: /repo
+    networks:
+      - appnet
+
+networks:
+  appnet:

@@ -28,7 +28,14 @@ services:
       - POSTGRES_PASSWORD=postgres
     networks:
       - appnet
-      
+
+  selenium:
+    image: selenium/standalone-chrome
+    ports:
+      - "4444:4444"
+    networks:
+      - appnet
+
   git:
     image: alpine/git
     container_name: git-server
